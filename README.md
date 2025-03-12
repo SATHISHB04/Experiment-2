@@ -150,5 +150,7 @@ int main() {
 }
 ```
 ## Output
+![Screenshot (7)](https://github.com/user-attachments/assets/b5269caa-39f8-499a-843d-5b0abebf9cdc)
 
 ## Result
+Program successfully executed and the errors and failures are also successfuly shown.
