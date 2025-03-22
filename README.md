@@ -1,156 +1,81 @@
 # Experiment-2
-## Name:Sathish.B
-## Reg No:212224040299
-Write a program in C language for Matrix multiplication fails. Introspect the causes for its failure and write down the possible reasons for its failure.
+Write a program in Python language for Matrix multiplication fails. Introspect the causes for its failure and write down the possible reasons for its failure. 
 ## Aim
-The aim of this program is to perform matrix multiplication, understand the causes for failure during its execution, and identify possible reasons for failure. Matrix multiplication is a binary operation that produces a matrix from two matrices. The number of columns in the first matrix must be equal to the number of rows in the second matrix for multiplication to be possible.
+Write a python program for matrix multiplication and inspect for failures. 
 
 ## Algorithm
-1.	Input the dimensions of the matrices: First, input the number of rows and columns for both matrices.
-2.	Check for multiplication compatibility: Ensure the number of columns of the first matrix is equal to the number of rows of the second matrix.
-3.	Input matrix elements: Input the elements for both matrices.
-4.	Perform matrix multiplication: For each element in the resultant matrix, sum the products of the corresponding row and column elements from the two matrices.
-5.	Output the resulting matrix: Display the resultant matrix.
-
-## Causes for Failure:
-Matrix multiplication may fail for the following reasons:
-1.	Incompatible matrix dimensions: If the number of columns in the first matrix does not equal the number of rows in the second matrix, the multiplication is not possible, leading to failure.
-2.	Memory allocation issues: If matrices are too large and memory is insufficient to store them, the program may crash or behave unexpectedly.
-3.	Incorrect input or initialization: Providing incorrect or invalid values (such as non-numeric input) can cause errors.
-4.	Array index out-of-bounds errors: Incorrect handling of array indices can lead to accessing memory outside the allocated space.
+1.	Start the program.
+2. Create empty list formatrix1, matrix2 and result.
+3. Get the rows and columns count from the user.
+4. Get the values of two matrix.
+5. Perform matrix multiplication and store the answer in result.
+6. Stop the program. 
 
 ## Program
 ```
-#include <stdio.h>
-#include <stdlib.h>
 
-// Function to multiply two matrices
-void multiplyMatrices(int **A, int **B, int **C, int rowA, int colA, int rowB, int colB) {
-    if (colA != rowB) {
-        printf("Matrix multiplication is not possible. Number of columns in Matrix A must equal number of rows in Matrix B.\n");
-        return;
-    }
+r1, c1 = input("Enter row and column count for matrix 1: ").split()
+r2, c2 = input("Enter row and column count for matrix 2: ").split()
 
-    for (int i = 0; i < rowA; i++) {
-        for (int j = 0; j < colB; j++) {
-            C[i][j] = 0;  // Initialize the result matrix element to zero
-            for (int k = 0; k < colA; k++) {
-                C[i][j] += A[i][k] * B[k][j];
-            }
-        }
-    }
-}
 
-// Function to input matrix elements
-void inputMatrix(int **matrix, int rows, int cols) {
-    printf("Enter elements of the matrix:\n");
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("Element [%d][%d]: ", i + 1, j + 1);
-            scanf("%d", &matrix[i][j]);
-        }
-    }
-}
+matrix1 = []
+matrix2 = []
+result = []
 
-// Function to print matrix
-void printMatrix(int **matrix, int rows, int cols) {
-    printf("Resultant Matrix:\n");
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%d ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-}
 
-// Function to allocate memory for a matrix
-int** allocateMatrix(int rows, int cols) {
-    // Check if the matrix exceeds the maximum allowable size
-    if (rows > 10 || cols > 10) {
-        printf("Matrix dimensions exceed the allowed maximum size of 10x10.\n");
-        exit(1);  // Exit if matrix dimensions exceed allowed size
-    }
+if r1.isnumeric() and c1.isnumeric() and r2.isnumeric() and c2.isnumeric():
+    r1, c1, r2, c2 = map(int, (r1, c1, r2, c2))
 
-    int **matrix = (int **)malloc(rows * sizeof(int *));
-    if (matrix == NULL) {
-        printf("Memory allocation for matrix failed!\n");
-        exit(1);  // Exit if memory allocation fails
-    }
+    
+    if c1 != r2:
+        print("Matrix multiplication not possible")
+    elif max(r1, c1, r2, c2) > 20 or min(r1, c1, r2, c2) == 0:
+        print("Matrix multiplication not possible")
+    else:
+      
+        print("Enter elements for matrix 1:")
+        for i in range(r1):
+            row = []
+            for j in range(c1):
+                row.append(int(input(f"Matrix 1[{i+1}][{j+1}]: ")))
+            matrix1.append(row)
 
-    for (int i = 0; i < rows; i++) {
-        matrix[i] = (int *)malloc(cols * sizeof(int));
-        if (matrix[i] == NULL) {
-            printf("Memory allocation for row %d failed!\n", i);
-            exit(1);  // Exit if memory allocation fails
-        }
-    }
+      
+        print("Enter elements for matrix 2:")
+        for i in range(r2):
+            row = []
+            for j in range(c2):
+                row.append(int(input(f"Matrix 2[{i+1}][{j+1}]: ")))
+            matrix2.append(row)
 
-    return matrix;
-}
+        for i in range(r1):
+            row = []
+            for j in range(c2):
+                total = 0
+                for k in range(c1):
+                    total += matrix1[i][k] * matrix2[k][j]
+                row.append(total)
+            result.append(row)
 
-// Function to free memory allocated for the matrix
-void freeMatrix(int **matrix, int rows) {
-    for (int i = 0; i < rows; i++) {
-        free(matrix[i]);
-    }
-    free(matrix);
-}
-
-int main() {
-    int **A, **B, **C;
-    int rowA, colA, rowB, colB;
-
-    // Input dimensions of Matrix A
-    printf("Enter the number of rows and columns for Matrix A: ");
-    scanf("%d %d", &rowA, &colA);
-
-    // Input dimensions of Matrix B
-    printf("Enter the number of rows and columns for Matrix B: ");
-    scanf("%d %d", &rowB, &colB);
-
-    // Check if the matrix dimensions are within the allowed size
-    if (rowA > 10 || colA > 10 || rowB > 10 || colB > 10) {
-        printf("Matrix dimensions exceed the allowed maximum size of 10x10.\n");
-        return 0;  // Exit the program if dimensions exceed allowed size
-    }
-
-    // Check for multiplication compatibility
-    if (colA != rowB) {
-        printf("Matrix multiplication is not possible. The number of columns in A must be equal to the number of rows in B.\n");
-        return 0; // Exit the program if matrices are incompatible
-    }
-
-    // Allocate memory for Matrix A
-    A = allocateMatrix(rowA, colA);
-
-    // Allocate memory for Matrix B
-    B = allocateMatrix(rowB, colB);
-
-    // Allocate memory for the result Matrix C
-    C = allocateMatrix(rowA, colB);
-
-    // Input elements for Matrix A
-    inputMatrix(A, rowA, colA);
-
-    // Input elements for Matrix B
-    inputMatrix(B, rowB, colB);
-
-    // Perform matrix multiplication
-    multiplyMatrices(A, B, C, rowA, colA, rowB, colB);
-
-    // Print the resulting matrix
-    printMatrix(C, rowA, colB);
-
-    // Free allocated memory for Matrix A, B, and C
-    freeMatrix(A, rowA);
-    freeMatrix(B, rowB);
-    freeMatrix(C, rowA);
-
-    return 0;
-}
+     
+        print("\nResultant Matrix:")
+        for row in result:
+            print(" ".join(map(str, row)))
+else:
+    print("Enter valid numbers")
 ```
+
+
 ## Output
-![Screenshot (7)](https://github.com/user-attachments/assets/b5269caa-39f8-499a-843d-5b0abebf9cdc)
+![Screenshot 2025-03-22 105749](https://github.com/user-attachments/assets/1fe0de44-cceb-4c0d-b43b-87f5b5b78cae)
+![Screenshot 2025-03-22 110028](https://github.com/user-attachments/assets/0415d9b7-d471-4e67-85bb-12529df86922)
+![Screenshot 2025-03-22 110616](https://github.com/user-attachments/assets/75cc0b16-f7cb-48e0-b77b-f344601fb84a)
+![Screenshot 2025-03-22 110658](https://github.com/user-attachments/assets/4cc0bb91-443f-44de-a79d-b1c526f51746)
+![Screenshot 2025-03-22 110749](https://github.com/user-attachments/assets/adead162-bad0-4bee-b383-9fdb53456000)
+
+
+
 
 ## Result
-Program successfully executed and the errors and failures are also successfuly shown.
+Thus, the python program for matrix multiplication is implemented and the causes      for its failure is 
+introspected successfully. 
